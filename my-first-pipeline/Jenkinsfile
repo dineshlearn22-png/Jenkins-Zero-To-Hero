@@ -1,20 +1,21 @@
 pipeline {
-    agent any
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/your-repo/java-hello-world.git'
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'javac HelloWorld.java'
-            }
-        }
-        stage('Run') {
-            steps {
-                sh 'java HelloWorld'
-            }
-        }
+  agent none
+  stages {
+    stage('Back-end') {
+      agent {
+        docker { image 'maven:3.8.3-adoptopenjdk-11' }
+      }
+      steps {
+        sh 'mvn --version'
+      }
     }
+    stage('Front-end') {
+      agent {
+        docker { image 'node:19-alpine' }
+      }
+      steps {
+        sh 'node --version'
+      }
+    }
+  }
 }
